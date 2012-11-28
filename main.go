@@ -29,15 +29,15 @@ func getServices() []Service {
 	services := make([]Service, 3)
 	services[0] = Service{
 		Name: "Web Frontend",
-		Url:  "http://www.google.com",
+		Url:  "http://httpstat.us/503",
 	}
 	services[1] = Service{
 		Name: "Provisioning API",
-		Url:  "http://www.google.com",
+		Url:  "http://httpstat.us/200",
 	}
 	services[2] = Service{
 		Name: "IRC Router",
-		Url:  "http://www.google.com",
+		Url:  "http://lulthisisntevenadomain.com",
 	}
 	return services
 }
@@ -47,15 +47,22 @@ func getServices() []Service {
 // is anything other than 200, it gets a failing status.
 func checkService(service Service) {
 	resp, err := http.Get(service.Url)
-	defer resp.Body.Close()
-	now := time.Now().UTC()
-	service.Last_Check = now
 	if err != nil {
 		fmt.Println("Check Failed:", err)
-	}
-	if resp.StatusCode == 200 {
-		service.Status = "Fully Operational"
+		service.Status = "Experiencing Issues"
 		checkChan <- service
+	}
+	now := time.Now().UTC()
+	service.Last_Check = now
+	if resp != nil {
+		defer resp.Body.Close()
+		if resp.StatusCode == 200 {
+			service.Status = "Fully Operational"
+			checkChan <- service
+		} else {
+			service.Status = "Experiencing Issues"
+			checkChan <- service
+		}
 	} else {
 		service.Status = "Experiencing Issues"
 		checkChan <- service
