@@ -21,5 +21,26 @@ func TestIndex(t *testing.T) {
 		checks()
 		t.Errorf("Fail => %v", err, resp)
 	}
+	if resp.StatusCode != 200 {
+		checks()
+		t.Errorf("Fail => %v", resp.StatusCode, resp)
+	}
+
+}
+
+func TestCheck(t *testing.T) {
+
+	var route = "/check"
+	var url = "http://localhost:4242" + route
+
+	resp, err := http.Get(url)
+	if err != nil {
+		checks()
+		t.Errorf("Fail => %v", err, resp)
+	}
+	if resp.StatusCode != 200 {
+		checks()
+		t.Errorf("Fail => %v", resp.StatusCode, resp)
+	}
 
 }
