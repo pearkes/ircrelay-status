@@ -37,7 +37,7 @@ func getServices() []Service {
 	}
 	services[2] = Service{
 		Name: "IRC Router",
-		Url:  "http://lulthisisntevenadomain.com",
+		Url:  "http://httpstat.us/200",
 	}
 	return services
 }
@@ -104,6 +104,7 @@ func CheckHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("error encoding json:", err)
 	}
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, string(j))
 	now := time.Now().UTC()
 	fmt.Println("200", r.URL, now)

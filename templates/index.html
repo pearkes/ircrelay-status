@@ -1,3 +1,63 @@
-<h1>IRCRelay Status</h1>
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+  serviceChecker.init();
+});
 
+function updateServices(services) {
+    if (services) {
+
+        // Loop over the services and add them to the list of services.
+        $.each(services, function(index, service){
+              if (service['status'] === 'Experiencing Issues') {
+                    status = 'down'
+              } else {
+                    status = 'up'
+              };
+              ident = service['name'].split(' ')[1]
+              console.log(ident)
+              var el = $('#' + ident)
+              el.empty();
+              var name = '<span class="name">' + service['name'] + '</span>';
+              var status = '<span class="status">' + service['status'] + "</span>";
+              var last_check = '<span class="last_check">' + service['last_check'] + "</span>";
+              el.append(status + ' ' + last_check);
+        });
+    };
+}
+
+var serviceChecker = {
+  init: function(){
+    this.makeRequest();
+    this.ping();
+  },
+
+  makeRequest: function(){
+    var getResponse = function(json){
+      if (json) {
+        updateServices(json)
+      }
+    };
+    $.getJSON('/check', getResponse)
+  },
+
+
+  ping: function(){
+    setTimeout(function(){ serviceChecker.init() }, 2000);
+  }
+}
+</script>
+</head>
+<body>
+<h1>IRCRelay Status</h1>
 Page rendered at: {{.}}
+<h1>Provisioning STATUS</h1>
+<span id="API"></span>
+<h1>Router STATUS</h1>
+<span id="Router"></span>
+<h1>Frontend STATUS</h1>
+<span id="Frontend"></span>
+</body>
+</html>
