@@ -11,10 +11,10 @@ import (
 var checkChan = make(chan Service)
 
 type Service struct {
-	Name       string    `json:name,omitempty`
-	Status     string    `json:status,omitempty`
-	Last_Check time.Time `json:last_check,omitempty`
-	Url        string    `json:-`
+	Name       string    `json:"name,omitempty"`
+	Status     string    `json:"status,omitempty"`
+	Last_Check time.Time `json:"last_check,omitempty"`
+	Url        string    `json:"-"`
 }
 
 func getServices() []Service {
