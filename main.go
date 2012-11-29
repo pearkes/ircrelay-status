@@ -41,7 +41,7 @@ func getServices() []Service {
 	}
 	services[2] = Service{
 		Name:       "IRC Router",
-		Url:        "http://httpstat.us/200",
+		Url:        "irc.ircrelay.com:6667",
 		Connection: "TCP",
 	}
 	return services
@@ -81,7 +81,7 @@ func checkService(service Service) {
 		}
 	}
 	if service.Connection == "TCP" {
-		conn, err := net.Dial("tcp", "irc.ircrelay.com:6667")
+		conn, err := net.Dial("tcp", service.Url)
 		now := time.Now().UTC()
 		service.Last_Check = now
 		if err != nil {
