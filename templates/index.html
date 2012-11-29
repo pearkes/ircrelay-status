@@ -20,14 +20,14 @@ function updateServices(services) {
               } else {
                     status = 'up'
               };
-              var lastCheck = moment(service['last_check']).format('MMMM Do YYYY, h:mm:ss a');
+              var lastCheck = moment(service['last_check']).format('h:mm:ss a');
               ident = service['name'].split(' ')[1]
               console.log(ident)
               var el = $('#' + ident)
               el.empty();
               var name = '<span class="name">' + service['name'] + '</span>';
-              var status = '<span class="status"><h3 class="' + status + '">' + service['status'] + "</h3></span>";
-              var last_check = '<span class="last_check">' + lastCheck + "</span>";
+              var status = '<span class="status ' + status + '">' + service['status'] + "</span>";
+              var last_check = '<span class="last_check note">' + lastCheck + "</span>";
               el.append(status + ' ' + last_check);
         });
     };
@@ -458,10 +458,8 @@ input[type='submit']:active {
 .down {
     color: #f75a54;
 }
-
-.last_check {
-    font-size: 13px;
-
+.status {
+    font-size: 16px;
 }
 </style>
 </head>
@@ -479,31 +477,31 @@ input[type='submit']:active {
     </div>
     <div class="row">
         <div class="span9 offset1">
-            <h3>This is the status page for IRCRelay and it's associated services.</h3>
+            <div class="span3">
                 <div class="span3 no-left-margin">
                     <h2>Provisioning API</h2>
-                    <p>Responsible for new accounts and transitioning accounts.</p>
+                    <p class="note">Responsible for new accounts and transitioning accounts.</p>
                     <noscript>Because you do not have Javascript enabled, please visit the <a href="/check">raw status page</a>.</noscript>
                     <span id="API"></span>
                 </div>
-                <div class="span3">
+                <div class="span3 no-left-margin">
                     <h2>Web Frontend</h2>
-                    <p>Signup and account management, as well the homepage.</p>
+                    <p class="note">Signup and account management, as well the homepage.</p>
                     <noscript>Because you do not have Javascript enabled, please visit the <a href="/check">raw status page</a>.</noscript>
                     <span id="Frontend"></span>
                 </div>
-                <div class="span3">
+                <div class="span3 no-left-margin">
                     <h2>IRC Router</h2>
-                    <p>Routes IRC connections sent to irc.ircrelay.com</p>
+                    <p class="note">Routes IRC connections sent to irc.ircrelay.com</p>
                     <noscript>Because you do not have Javascript enabled, please visit the <a href="/check">raw status page</a>.</noscript>
                     <span id="Router"></span>
                 </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span9 offset1">
-             <h2>Get Updates During Outages</h2>
-             <p>The best place to get realtime updates about IRCRelay outages is our Twitter account, <a href="https://twitter.com/ircrelay">@ircrelay</a>.</p>
+            </div>
+            <div class="span5">
+                <h2>Status Updates</h2>
+                <a class="twitter-timeline" width="470px" height="408px" href="https://twitter.com/pearkes" data-widget-id="273685608101183488">Get Realtime Status Updates @pearkes</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            </div>
         </div>
     </div>
 </div>
