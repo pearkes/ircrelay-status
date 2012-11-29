@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"net"
 	"net/http"
 	"time"
 )
@@ -21,6 +22,7 @@ type Service struct {
 	Status     string    `json:"status,omitempty"`
 	Last_Check time.Time `json:"last_check,omitempty"`
 	Url        string    `json:"-"`
+	Connection string    `json:"-"`
 }
 
 // getServices sets up the services that we'd like to check and
@@ -28,44 +30,70 @@ type Service struct {
 func getServices() []Service {
 	services := make([]Service, 3)
 	services[0] = Service{
-		Name: "Web Frontend",
-		Url:  "http://httpstat.us/503",
+		Name:       "Web Frontend",
+		Url:        "https://www.ircrelay.com",
+		Connection: "HTTP",
 	}
 	services[1] = Service{
-		Name: "Provisioning API",
-		Url:  "http://httpstat.us/200",
+		Name:       "Provisioning API",
+		Url:        "https://ircrelay-api-production.herokuapp.com",
+		Connection: "HTTP",
 	}
 	services[2] = Service{
-		Name: "IRC Router",
-		Url:  "http://httpstat.us/200",
+		Name:       "IRC Router",
+		Url:        "http://httpstat.us/200",
+		Connection: "TCP",
 	}
 	return services
+}
+
+func failCheck(service Service) {
+	service.Status = "Experiencing Issues"
+	checkChan <- service
+}
+
+func passCheck(service Service) {
+	service.Status = "Fully Operational"
+	checkChan <- service
 }
 
 // checkService makes an http request to the service and
 // sets a status on the Service struct. If the response status code
 // is anything other than 200, it gets a failing status.
 func checkService(service Service) {
-	resp, err := http.Get(service.Url)
-	if err != nil {
-		fmt.Println("Check Failed:", err)
-		service.Status = "Experiencing Issues"
-		checkChan <- service
-	}
-	now := time.Now().UTC()
-	service.Last_Check = now
-	if resp != nil {
-		defer resp.Body.Close()
-		if resp.StatusCode == 200 {
-			service.Status = "Fully Operational"
-			checkChan <- service
-		} else {
-			service.Status = "Experiencing Issues"
-			checkChan <- service
+	if service.Connection == "HTTP" {
+		resp, err := http.Get(service.Url)
+		now := time.Now().UTC()
+		service.Last_Check = now
+		if err != nil {
+			fmt.Println("Check Failed:", err)
+			failCheck(service)
 		}
-	} else {
-		service.Status = "Experiencing Issues"
-		checkChan <- service
+		if resp != nil {
+			defer resp.Body.Close()
+			if resp.StatusCode == 200 {
+				passCheck(service)
+			} else {
+				failCheck(service)
+			}
+		} else {
+			failCheck(service)
+		}
+	}
+	if service.Connection == "TCP" {
+		conn, err := net.Dial("tcp", "irc.ircrelay.com:6667")
+		now := time.Now().UTC()
+		service.Last_Check = now
+		if err != nil {
+			fmt.Println("Check Failed:", err)
+			failCheck(service)
+		}
+		if conn != nil {
+			conn.Close()
+			passCheck(service)
+		} else {
+			failCheck(service)
+		}
 	}
 }
 

@@ -1,6 +1,10 @@
 <html>
 <head>
+<title>IRCRelay Status</title>
+<link href='//fonts.googleapis.com/css?family=Inika:400,700' rel='stylesheet' type='text/css'>
+<link href='https://www.ircrelay.com/static/css/bootstrap.css' rel='stylesheet' type='text/css'>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//raw.github.com/timrwood/moment/1.7.2/min/moment.min.js"></script>
 <script type="text/javascript">
 $(function(){
   serviceChecker.init();
@@ -16,18 +20,18 @@ function updateServices(services) {
               } else {
                     status = 'up'
               };
+              var lastCheck = moment(service['last_check']).format('MMMM Do YYYY, h:mm:ss a');
               ident = service['name'].split(' ')[1]
               console.log(ident)
               var el = $('#' + ident)
               el.empty();
               var name = '<span class="name">' + service['name'] + '</span>';
-              var status = '<span class="status">' + service['status'] + "</span>";
-              var last_check = '<span class="last_check">' + service['last_check'] + "</span>";
+              var status = '<span class="status"><h3 class="' + status + '">' + service['status'] + "</h3></span>";
+              var last_check = '<span class="last_check">' + lastCheck + "</span>";
               el.append(status + ' ' + last_check);
         });
     };
 }
-
 var serviceChecker = {
   init: function(){
     this.makeRequest();
@@ -49,15 +53,459 @@ var serviceChecker = {
   }
 }
 </script>
+<style type="text/css">
+/*Base Style*/
+body {
+    font-family: 'Inika', serif;
+    font-size: 16px;
+    line-height: 25px;
+}
+
+h2 {
+    border-bottom: 1px #e5e5e5 solid;
+    padding-bottom: 5px;
+}
+
+.section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+img.rabbit {
+    max-width: 200px;
+    padding-left: 0px;
+    padding-top: 30px;
+}
+
+#rabbit {
+    padding-left: 80px;
+    }
+
+.mono {
+    font-family: Courier, monospace;
+}
+
+.hidden {
+    left: -4000px;
+    width: 2px;
+    height: 2px;
+}
+
+h1 a {
+    color: inherit;
+}
+
+h1 a:hover {
+    color: inherit;
+
+}
+
+li.helper {
+    background-color: #eee;
+    float:right;
+    font-size: 14px;
+    margin-top:5px;
+    list-style-type: none;
+    padding: 4px;
+    display: none;
+}
+
+span.active-step {
+    background-color: #fd9a2c;
+    color: #fff;
+    padding: 6px;
+}
+
+.no-break {
+    white-space:nowrap;
+}
+
+span.inactive-step {
+    background-color: #eee;
+    padding: 6px;
+}
+
+.networks {
+    font-size: 14px;
+}
+
+div.steps {
+    text-align: center;
+    font-size: 18px;
+    line-height: 50px;
+}
+
+p.steps {
+    text-align: center;
+}
+
+.fadeout {
+    zoom: 1;
+    filter: alpha(opacity=20);
+    opacity: 0.2;
+}
+
+
+input.user-select {
+    -webkit-user-select: text;
+}
+
+.billing-flashes {
+    list-style-type: none;
+    background-color: #fd9a2c;
+    padding: 6px;
+    color: #fff;
+    display: none;
+}
+
+
+.flashes {
+    list-style-type: none;
+    background-color: #fd9a2c;
+    padding: 6px;
+    color: #fff;
+    display: inline-block;
+}
+
+.note {
+    font-size: 13px;
+    color: #808080;
+    }
+
+/*Alignment*/
+
+.input-width {
+    width: 225px;
+}
+
+
+.clear {
+    clear: none;
+    float: left;
+    padding-right: 5px;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.footer-links {
+    padding-bottom: 50px;
+    font-size: 14px;
+}
+
+/*Text Styles*/
+
+a {
+    color: #f48102;
+}
+
+a:hover {
+    color: #d26f02;
+}
+
+.no-left-margin {
+    margin-left: 0px;
+    }
+
+.gray-back {
+    background-color: #eee;
+}
+
+.delete {
+    float: right;
+    font-weight: normal;
+    font-size: 16px;
+    }
+
+/*Table Styles*/
+
+table.pricing-table {
+    margin-left: 0px;
+    padding-bottom: 60px;
+}
+
+table.pricing-table td {
+    padding: 20px;
+    text-align: left;
+}
+
+table.pricing-table tr {
+    background-color: #eee;
+}
+table.pricing-table th {
+    width: 35%;
+    text-align: left;
+    background-color: #fff;
+}
+
+/*List Styles*/
+
+li.inline-error {
+    margin-top:5px;
+    list-style-type: none;
+    background-color: #fd9a2c;
+    padding: 4px;
+    color: #fff;
+    display: inline-block;
+}
+
+ul.header-links li {
+    display: inline;
+    list-style-type: none;
+}
+
+ul {
+    padding: 0;
+}
+
+ul.no-dec {
+    list-style-type: none;
+    }
+
+ul.padded {
+    padding-left: 30px;
+}
+/*Form Styles*/
+
+form,
+input,
+select,
+optgroup, /* 1 */
+textarea,
+button {
+    margin: 5px 0px 5px 0px; /* 3 */
+    padding: 3; /* 3 */
+    font-size: 18px;
+}
+
+.submit {
+    margin-top: 10px; /* 3 */
+}
+
+fieldset {
+    border: 1px solid #c cc;
+    margin: 1.5em 0; /* 5 */
+    padding: 1em;
+}
+
+label {
+    color: #555;
+    font-size: 16px;
+}
+
+div.error input {
+    border-color: #f00;
+}
+
+input + label {
+    margin-top: 1em;
+}
+
+input[type='checkbox'] + label,
+input[type='radio'] + label {
+    display: inline-block;
+    margin: 0.5em 0 0.5em 0;
+}
+
+input,
+select, /* 1 */
+textarea,
+button {
+    line-height: normal; /* 2 */
+    vertical-align: top;
+}
+
+input[type='color'],
+input[type='date'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='email'],
+input[type='month'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='time'],
+input[type='url'],
+input[type='week'],
+select,
+textarea,
+button,
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+    -moz-background-clip: padding;
+    -ms-background-clip: padding-box;
+    -o-background-clip: padding-box;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    border: #999 1px solid;
+    height: 1.8em;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 2px 3px;
+}
+
+input[type='color'],
+input[type='date'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='email'],
+input[type='month'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='time'],
+input[type='url'],
+input[type='week'],
+select,
+textarea {
+    background-color: #fff;
+}
+
+
+input[type='color']:focus,
+input[type='date']:focus,
+input[type='datetime']:focus,
+input[type='datetime-local']:focus,
+input[type='email']:focus,
+input[type='month']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+input[type='search']:focus,
+input[type='tel']:focus,
+input[type='text']:focus,
+input[type='time']:focus,
+input[type='url']:focus,
+input[type='week']:focus,
+select:focus,
+select[size]:focus,
+textarea:focus,
+button:focus,
+input[type='button']:focus,
+input[type='reset']:focus,
+input[type='submit']:focus,
+input[type='radio']:focus {
+    border-color: #f48102;
+    outline: 0;
+    z-index: 1;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    font-size: .6875em; /* 1 */
+    position: relative; /* 2 */
+    vertical-align: middle; /* 3 */
+}
+
+input[type='checkbox'] {
+    margin: 2px 1px;
+}
+
+input[type='radio'] {
+    margin: 1px;
+}
+
+select[multiple],
+select[size],
+textarea {
+  height: auto;
+}
+
+select[size='0'],
+select[size='1'] {
+    height: 1.8em;
+}
+
+button,
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+    line-height: normal;
+    border-color: #999;
+    padding: 3px .5em;
+    background-color: #eee;
+}
+
+button:hover,
+input[type='button']:hover,
+input[type='reset']:hover,
+input[type='submit']:hover {
+}
+
+button:active,
+input[type='button']:active,
+input[type='reset']:active,
+input[type='submit']:active {
+}
+
+#connection-details {
+    display: none;
+}
+.connection-provision {
+    text-align: center;
+}
+
+.up {
+    color: #4dad24;
+}
+.down {
+    color: #f75a54;
+}
+
+.last_check {
+    font-size: 13px;
+
+}
+</style>
 </head>
 <body>
-<h1>IRCRelay Status</h1>
-Page rendered at: {{.}}
-<h1>Provisioning STATUS</h1>
-<span id="API"></span>
-<h1>Router STATUS</h1>
-<span id="Router"></span>
-<h1>Frontend STATUS</h1>
-<span id="Frontend"></span>
+<div class="container">
+    <div class="row">
+       <div class="span6 offset1">
+                <h1><a href="/" tabindex="-1">IRCRelay<span class="second-head"> Status</span></a></h1>
+            </div>
+            <div class="span3 offset1">
+                <ul class="header-links">
+                    <li class="span2"><a href="mailto:support@ircrelay.com" tabindex="-1">Email Support</a></li>
+                </ul>
+            </div>
+    </div>
+    <div class="row">
+        <div class="span9 offset1">
+            <h3>This is the status page for IRCRelay and it's associated services.</h3>
+                <div class="span3 no-left-margin">
+                    <h2>Provisioning API</h2>
+                    <p>Responsible for new accounts and transitioning accounts.</p>
+                    <noscript>Because you do not have Javascript enabled, please visit the <a href="/check">raw status page</a>.</noscript>
+                    <span id="API"></span>
+                </div>
+                <div class="span3">
+                    <h2>Web Frontend</h2>
+                    <p>Signup and account management, as well the homepage.</p>
+                    <noscript>Because you do not have Javascript enabled, please visit the <a href="/check">raw status page</a>.</noscript>
+                    <span id="Frontend"></span>
+                </div>
+                <div class="span3">
+                    <h2>IRC Router</h2>
+                    <p>Routes IRC connections sent to irc.ircrelay.com</p>
+                    <noscript>Because you do not have Javascript enabled, please visit the <a href="/check">raw status page</a>.</noscript>
+                    <span id="Router"></span>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span9 offset1">
+             <h2>Get Updates During Outages</h2>
+             <p>The best place to get realtime updates about IRCRelay outages is our Twitter account, <a href="https://twitter.com/ircrelay">@ircrelay</a>.</p>
+        </div>
+    </div>
+</div>
 </body>
 </html>
