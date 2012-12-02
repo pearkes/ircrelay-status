@@ -6,8 +6,20 @@ import (
 	"html/template"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
+
+// Get the Port from the environment so we can run on Heroku
+func getPort() string {
+	var port = os.Getenv("PORT")
+	// Set a default port if there is nothing in the environment
+	if port == "" {
+		port = "4747"
+		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+	}
+	return ":" + port
+}
 
 // checkChan is the channel that we'll use to send Services.
 // This let's us kick-off a bunch of checks and get back the statuses
@@ -143,5 +155,5 @@ func main() {
 	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/check", CheckHandler)
 	fmt.Println("Starting web service...")
-	http.ListenAndServe(":4242", nil)
+	http.ListenAndServe(getPort(), nil)
 }
