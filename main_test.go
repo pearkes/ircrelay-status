@@ -14,7 +14,7 @@ func checks() {
 func TestIndex(t *testing.T) {
 
 	var route = "/"
-	var url = "http://localhost:4242" + route
+	var url = "http://localhost:4747" + route
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -31,7 +31,7 @@ func TestIndex(t *testing.T) {
 func TestCheck(t *testing.T) {
 
 	var route = "/check"
-	var url = "http://localhost:4242" + route
+	var url = "http://localhost:4747" + route
 
 	resp, err := http.Get(url)
 	if err != nil {
